@@ -1,0 +1,289 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./menu.xhtml">
+            <ui:define name="content">
+                <p:growl id="growl" showDetail="true" life="3000" />
+                <h:form id="formBusq">
+                    <h3 style="margin-top:0">Busquedas</h3>
+                    <p:accordionPanel>
+                        <p:tab title="Buscar Oden por Cliente">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Buscar por:"/>
+                                <p:selectOneMenu id="bucarCli" value="#{ordensBean.parametroBusqCli}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                                    <f:selectItem itemLabel="Cédula" itemValue="cliCedula" />
+                                    <f:selectItem itemLabel="Teléfono" itemValue="cliTelefono" />
+                                    <f:selectItem itemLabel="Movil" itemValue="cliMovil" />
+                                </p:selectOneMenu>
+                                <p:inputText value="#{ordensBean.valorBusqCli}" style="width:125px"/>
+                                <p:commandButton id="btnBusqCliente" value="Buscar" update="panelCli, ordsCli, :formBusq, :growl"
+                                                 actionListener="#{ordensBean.FindClientes(event)}"/>
+                            </h:panelGrid>
+                            <h:panelGrid id="panelCli" columns="4" cellpadding="5">
+                                <p:outputLabel value="Nombres y Apellidos:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliNombres}"/>
+                                <p:outputLabel value="Cédula:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliCedula}"/>
+                                <p:outputLabel value="Teléfono"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliTelefono}"/>
+                                <p:outputLabel value="Movil:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliMovil}"/>
+                                <p:outputLabel value="Provincia:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliProvincia}"/>
+                                <p:outputLabel value="Cantón:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliCanton}"/>
+                                <p:outputLabel value="Dirección:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliDireccion}"/>
+                                <p:outputLabel value="Referencias:"/>
+                                <p:outputLabel value="#{ordensBean.cliente.cliReferencia}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <div align="center">
+                                <p:dataTable id="ordsCli" 
+                                             var="ordC" 
+                                             value="#{ordensBean.ordensCli}"
+                                             rows="10" paginator="true" emptyMessage="No se encontro" tableStyle="width:auto"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
+                                    <f:facet name="header">
+                                        Ordenes del Cliente
+                                    </f:facet>
+                                    <p:column style="width:32px" headerText="ID SIS">
+                                        <h:outputText value="#{ordC.ordNumSis}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT1">
+                                        <h:outputText value="#{ordC.ordNumOt1}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT2">
+                                        <h:outputText value="#{ordC.ordNumOt2}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT3">
+                                        <h:outputText value="#{ordC.ordNumOt3}" />
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Producto">
+                                        <h:outputText value="#{ordC.producto.proNombre}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Marca">
+                                        <h:outputText value="#{ordC.producto.proMarca}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Modelo">
+                                        <h:outputText value="#{ordC.producto.proModelo}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Serie">
+                                        <h:outputText value="#{ordC.producto.proSerie}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Tipo">
+                                        <h:outputText value="#{ordC.ordTipo}" />
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Estado">
+                                        <h:outputText value="#{ordensBean.getEstado(event, ordC.ordEstado)}" />
+                                    </p:column>
+                                    <p:column style="width:32px;text-align: center">
+                                        <p:commandButton icon="ui-icon-search" update=":formBusq" 
+                                                         actionListener="#{ordensBean.openOrden(event, ordC)}"
+                                                         oncomplete="handleLoginRequest(xhr, status, args)"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                        </p:tab>
+                        <p:tab title="Buscar Oden por Producto">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Buscar por:"/>
+                                <p:selectOneMenu id="bucarPro" value="#{ordensBean.parametroBusqPro}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                                    <f:selectItem itemLabel="Serie" itemValue="proSerie" />
+                                    <f:selectItem itemLabel="ID SIS" itemValue="proNumSis" />
+                                    <f:selectItem itemLabel="Código 1" itemValue="proCod1" />
+                                    <f:selectItem itemLabel="Código 2" itemValue="proCod2" />
+                                    <f:selectItem itemLabel="Código 3" itemValue="proCod3" />
+                                </p:selectOneMenu>
+                                <p:inputText value="#{ordensBean.valorBusqPro}" style="width:125px"/>
+                                <p:commandButton id="btnBusqProducto" value="Buscar" update="panelProd, ordsProd, :formBusq, :growl" 
+                                                 actionListener="#{ordensBean.FindProductos(event)}"/>
+                            </h:panelGrid>
+                            <h:panelGrid id="panelProd" columns="4" cellpadding="5">
+                                <p:outputLabel value="Producto:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proNombre}"/>
+                                <p:outputLabel value="Marca:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proMarca}"/>
+                                <p:outputLabel value="Modelo:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proModelo}"/>
+                                <p:outputLabel value="Serie:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proSerie}"/>
+                                <p:outputLabel value="Código 1:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proCod1}"/>
+                                <p:outputLabel value="Código 2:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proCod2}"/>
+                                <p:outputLabel value="Código 3:"/>
+                                <p:outputLabel value="#{ordensBean.producto.proCod3}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <div align="center">
+                                <p:dataTable 
+                                    id="ordsProd" 
+                                    var="ordP" 
+                                    value="#{ordensBean.ordensPro}"
+                                    rows="10" paginator="true" emptyMessage="No se encontro" tableStyle="width:auto"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="5,10,15">
+                                    <f:facet name="header">
+                                        Ordenes del Producto
+                                    </f:facet>
+                                    <p:column style="width:32px" headerText="ID SIS">
+                                        <h:outputText value="#{ordP.ordNumSis}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT1">
+                                        <h:outputText value="#{ordP.ordNumOt1}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT2">
+                                        <h:outputText value="#{ordP.ordNumOt2}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT3">
+                                        <h:outputText value="#{ordP.ordNumOt3}" />
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Cliente">
+                                        <h:outputText value="#{ordP.cliente.cliNombres}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Telefono">
+                                        <h:outputText value="#{ordP.cliente.cliTelefono}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Movil">
+                                        <h:outputText value="#{ordP.cliente.cliMovil}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Provincia">
+                                        <h:outputText value="#{ordP.cliente.cliProvincia}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Canton">
+                                        <h:outputText value="#{ordP.cliente.cliCanton}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Tipo">
+                                        <h:outputText value="#{ordP.ordTipo}" />
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Estado">
+                                        <h:outputText value="#{ordensBean.getEstado(event, ordP.ordEstado)}" />
+                                    </p:column>
+                                    <p:column style="width:32px;text-align: center">
+                                        <p:commandButton icon="ui-icon-search" update=":formBusq" 
+                                                         actionListener="#{ordensBean.openOrden(event, ordP)}"
+                                                         oncomplete="handleLoginRequest(xhr, status, args)"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+
+                        </p:tab>
+                        <p:tab title="Buscar Oden">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Buscar por:"/>
+                                <p:selectOneMenu id="bucarOrd" value="#{ordensBean.parametroBusqOrd}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                                    <f:selectItem itemLabel="ID SIS" itemValue="ordNumSis" />
+                                    <f:selectItem itemLabel="Código Orden 1" itemValue="ordNumOt1" />
+                                    <f:selectItem itemLabel="Código Orden 2" itemValue="ordNumOt2" />
+                                    <f:selectItem itemLabel="Código Orden 3" itemValue="ordNumOt3" />
+                                </p:selectOneMenu>
+                                <p:inputText value="#{ordensBean.valorBusqOrd}" style="width:125px"/>
+                                <p:commandButton id="btnBusqOrden" value="Buscar" update="ordsOrd, :formBusq, :growl" 
+                                                 actionListener="#{ordensBean.FindOrdenes(event)}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <div align="center">
+                                <p:dataTable 
+                                    id="ordsOrd" 
+                                    var="ordO"
+                                    value="#{ordensBean.ordens}"
+                                    rows="10" paginator="true" emptyMessage="No se encontro" tableStyle="width:auto"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="5,10,15">
+                                    <f:facet name="header">
+                                        Ordenes del Producto
+                                    </f:facet>
+                                    <p:column style="width:32px" headerText="ID SIS">
+                                        <h:outputText value="#{ordO.ordNumSis}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT1">
+                                        <h:outputText value="#{ordO.ordNumOt1}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT2">
+                                        <h:outputText value="#{ordO.ordNumOt2}" />
+                                    </p:column>
+                                    <p:column style="width:32px" headerText="Num. OT3">
+                                        <h:outputText value="#{ordO.ordNumOt3}" />
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Cliente">
+                                        <h:outputText value="#{ordO.cliente.cliNombres}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Movil">
+                                        <h:outputText value="#{ordO.cliente.cliMovil}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Provincia">
+                                        <h:outputText value="#{ordO.cliente.cliProvincia}"/>
+                                    </p:column> 
+
+                                    <p:column style="text-align: center" headerText="Producto">
+                                        <h:outputText value="#{ordO.producto.proNombre}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Marca">
+                                        <h:outputText value="#{ordO.producto.proMarca}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Serie">
+                                        <h:outputText value="#{ordO.producto.proSerie}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center" headerText="Tipo">
+                                        <h:outputText value="#{ordO.ordTipo}" />
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Estado">
+                                        <h:outputText value="#{ordensBean.getEstado(event, ordO.ordEstado)}" />
+                                    </p:column>
+                                    <p:column style="width:32px;text-align: center">
+                                       <p:commandButton icon="ui-icon-search" update=":formBusq" 
+                                                         actionListener="#{ordensBean.openOrden(event, ordO)}"
+                                                         oncomplete="handleLoginRequest(xhr, status, args)"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                        </p:tab>
+                    </p:accordionPanel>
+                    <script type="text/javascript">
+                        function handleLoginRequest(xhr, status, args) {
+                            if (args.validationFailed || !args.loggedIn) {
+                                jQuery('#form').effect("shake", {times: 5}, 100);
+                            }
+                            else {
+                                location.href = args.ruta;
+                            }
+                        }
+                    </script>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

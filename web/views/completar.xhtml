@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./menu.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="growl" showDetail="true" life="3000" />
+                <h:form id="formOrdC">
+                    <h1 align="right">Num. Orden: #{ordencBean.orden.ordNumSis}</h1>
+                    <br/>
+                    <h3 style="margin-top:0">Cliente</h3>
+                    <h:panelGrid id="panelCli" columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres y Apellidos:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliNombres}"/>
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliCedula}"/>
+                        <p:outputLabel value="Teléfono"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliTelefono}"/>
+                        <p:outputLabel value="Movil:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliMovil}"/>
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliProvincia}"/>
+                        <p:outputLabel value="Cantón:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliCanton}"/>
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliDireccion}"/>
+                        <p:outputLabel value="Referencias:"/>
+                        <p:outputLabel value="#{ordencBean.cliente.cliReferencia}"/>
+                    </h:panelGrid>
+                    <br/>
+                    <h1 align="right">Num. Producto #{ordencBean.producto.proNumSis}</h1>
+                    <br/>
+                    <h3 style="margin-top:0">Producto</h3>
+                    <h:panelGrid id="panelProd" columns="4" cellpadding="5">
+                        <p:outputLabel value="Producto:"/>
+                        <p:selectOneMenu id="mProducto" value="#{ordencBean.producto.proNombre}" style="width: 275px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                            <f:selectItems value="#{ordencBean.itemsProNombres}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Marca:"/>
+                        <p:selectOneMenu id="mMarca" value="#{ordencBean.producto.proMarca}" style="width: 275px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                            <f:selectItems value="#{ordencBean.itemsMarcas}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Modelo:"/>
+                        <p:inputText value="#{ordencBean.producto.proModelo}" style="width: 275px"/>
+                        <p:outputLabel value="Serie:"/>
+                        <p:inputText value="#{ordencBean.producto.proSerie}" style="width: 275px"/>
+                        <p:outputLabel value="Código 1:"/>
+                        <p:inputText value="#{ordencBean.producto.proCod1}" style="width: 275px"/>
+                        <p:outputLabel value="Código 2:"/>
+                        <p:inputText value="#{ordencBean.producto.proCod2}" style="width: 275px"/>
+                        <p:outputLabel value="Código 3:"/>
+                        <p:inputText value="#{ordencBean.producto.proCod3}" style="width: 275px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:commandButton id="btnEstSaveProducto" value="Actualizar Producto" 
+                                         update="btnEstSaveProducto, :formOrdC, :growl"
+                                         actionListener="#{ordencBean.updateProductos(event)}"/>
+                        <p:commandButton id="btnEstGarantia" value="Completar Garantia" 
+                                         disabled="#{ordencBean.habilitarGarantia}"
+                                         update="btnEstGarantia, panelGar, :formOrdC, :growl"
+                                         oncomplete="PF('dlgGarPro').show();"/>
+                    </h:panelGrid>
+                    <p:dialog header="Garantia" widgetVar="dlgGarPro" resizable="false">
+                        <h:panelGrid id="panelGar" columns="4" cellpadding="5">
+                            <p:outputLabel value="Almancén:"/>
+                            <p:selectOneMenu id="mAlmancen" value="#{ordencBean.garantia.garAlmacen}" style="width: 275px">
+                                <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                <f:selectItems value="#{ordencBean.itemsAlmacen}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Teléfono Almacén:"/>
+                            <p:inputText value="#{ordencBean.garantia.garTelefonoAlmacen}" style="width: 275px"/>
+                            <p:outputLabel value="Numero de Factura:"/>
+                            <p:inputText value="#{ordencBean.garantia.garNumFactura}" style="width: 275px"/>
+                            <p:outputLabel value="Fecha de Factura:"/>
+                            <p:calendar id="garfechafactura" value="#{ordencBean.garantia.garFechaFactura}" showOn="button" pattern="dd-MM-yyyy"/>                                
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton id="btnActuGarantia" value="Actualizar Garantia" 
+                                             disabled="#{ordenBean.hablilitaGarantia}" update="btnActuGarantia, :formOrdC, :growl" 
+                                             actionListener="#{ordenBean.saveGarantias(event)}"/>
+                        </f:facet>
+                    </p:dialog>
+                    <br/>
+                    <h3 style="margin-top:0">Repuestos</h3>
+                    <h:panelGrid id="dtOrde" columns="2" cellpadding="10">
+                        <p:dataTable id="dtRep" 
+                                     var="rep" 
+                                     value="#{ordencBean.detallers}" 
+                                     rows="10" paginator="true" emptyMessage="No se han agregado repuestos" tableStyle="width:auto"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                Repuestos
+                            </f:facet>
+                            <p:column headerText="Descripción:">
+                                <h:outputText value="#{rep.repuesto.repNombre}" />
+                            </p:column>
+                            <p:column headerText="Marca:">
+                                <h:outputText value="#{rep.repuesto.repMarca}" />
+                            </p:column>
+                            <p:column headerText="Num. Parte:">
+                                <h:outputText value="#{rep.repuesto.repNumPart}" />
+                            </p:column>
+                            <p:column headerText="Codigo 1:">
+                                <h:outputText value="#{rep.repuesto.repCod1}" />
+                            </p:column>
+                            <p:column headerText="Codigo 2:">
+                                <h:outputText value="#{rep.repuesto.repCod2}" />
+                            </p:column>
+                            <p:column headerText="Codigo 3:">
+                                <h:outputText value="#{rep.repuesto.repCod3}" />
+                            </p:column>
+                            <p:column headerText="Cantidad:">
+                                <h:outputText value="#{rep.detallleRCantidad}" />
+                            </p:column>
+                            <p:column headerText="Valor:">
+                                <h:outputText value="#{rep.detallleRValor}" />
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="1" cellpadding="5">
+                            <p:commandButton id="btnAgregarRep" value="Agregar" style="width: 150px"/>
+                            <p:commandButton id="btnEliminarDt" value="Eliminar" style="width: 150px"/>  
+                            <p:commandButton id="btnEstablecerDt" value="Establecer" style="width: 150px"/>                           
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h1 align="right">Num. Orden: #{ordencBean.orden.ordNumSis}</h1>
+                    <br/>
+                    <h3 style="margin-top:0">Detalles Orden</h3>
+                    <h:panelGrid id="ordTrabFinal" columns="4" cellpadding="10">
+                        <p:outputLabel value="Tipo de Servicio:"/>
+                        <p:selectOneMenu id="tipoOrdC" value="#{ordenBeanC.orden.ordTipo}" style="width:125px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                            <f:selectItem itemLabel="INTERNA" itemValue="INTERNA" />
+                            <f:selectItem itemLabel="EXTERNA" itemValue="EXTERNA" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Estado de la Orden"/>
+                        <p:selectOneMenu id="EstadoOrdC" value="#{ordencBean.orden.ordEstado}" style="width:125px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                            <f:selectItem itemLabel="ABIERTA" itemValue="1" />
+                            <f:selectItem itemLabel="CERRADA" itemValue="0" />
+                            <f:selectItem itemLabel="PENDIENTE" itemValue="2" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Valor Mano de Obra:" />
+                        <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
+                        <p:outputLabel value="Valor Repuestos:" />
+                        <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
+                        <p:outputLabel value="Valor Movilización (km):" />
+                        <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
+                        <p:outputLabel value="Valor Total:" />
+                        <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
+                        
+                        <p:outputLabel value="Reparación:" />
+                        <p:inputTextarea value="#{ordencBean.orden.ordReparacion}" />
+                    </h:panelGrid>
+
+
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

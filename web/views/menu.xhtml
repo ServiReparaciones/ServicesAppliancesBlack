@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top"></ui:insert>
+        </div>
+        <h3 align="right">#{loginBean.userAttributeId} #{loginBean.userAttribute}</h3>
+        <h:form>
+            <p:menubar>
+                <p:submenu label="Clientes">
+                    <p:menuitem value="Registrar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/cliente.xhtml" />
+                    <p:menuitem value="Actualizar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/clientes.xhtml" /> 
+                </p:submenu>
+                <p:submenu label="Ordenes">
+                    <p:menuitem value="Nueva" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/orden.xhtml"/>
+                    <p:menuitem value="Buscar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/buscar.xhtml"/>
+                </p:submenu>
+
+                <f:facet name="options" >
+                    <p:commandButton id="dynaButton" value="Usuario" type="button" icon="ui-icon-person" />
+                    <p:tieredMenu overlay="true" trigger="dynaButton" my="left top" at="left bottom" style="width:200px">
+                        <p:menuitem value="Salir" icon="ui-icon-circle-arrow-e" actionListener="#{loginBean.logout(event)}" 
+                                    oncomplete="handleLoginRequest(xhr, status, args)" />
+                    </p:tieredMenu>
+                </f:facet>
+            </p:menubar>
+        </h:form>
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.loggerOut) {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+        <br/>
+        <div id="content" class="center_content">
+            <ui:insert name="content"></ui:insert>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom"></ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

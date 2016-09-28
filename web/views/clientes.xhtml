@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./menu.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="growl" showDetail="true" life="3000" />
+                <h:form id="formClis">
+                    <h3 style="margin-top:0">Actualizar datos del cliente</h3>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Buscar por:"/>
+                        <p:selectOneMenu id="bucarCli" value="#{clienteBean.parametroBusqCli}" style="width:125px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                            <f:selectItem itemLabel="Cédula" itemValue="cliCedula" />
+                            <f:selectItem itemLabel="Teléfono" itemValue="cliTelefono" />
+                            <f:selectItem itemLabel="Movil" itemValue="cliMovil" />
+                        </p:selectOneMenu>
+                        <p:inputText value="#{clienteBean.valorBusqCli}" style="width:125px"/>
+                        <p:commandButton id="btnBusqCliente" value="Buscar" update="panelClis, :formClis, :growl"
+                                         actionListener="#{clienteBean.FindClientes(event)}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="panelClis" columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres y Apellidos:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliNombres}" style="width: 275px"/>
+                        <p:outputLabel value="Cédula:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliCedula}" style="width: 275px"/>
+                        <p:outputLabel value="Teléfono"/>
+                        <p:inputText value="#{clienteBean.cliente.cliTelefono}" style="width: 275px"/>
+                        <p:outputLabel value="Movil:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliMovil}" style="width: 275px"/>
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{clienteBean.cliente.cliProvincia}"/>
+                        <p:outputLabel value="Cantón:"/>
+                        <p:outputLabel value="#{clienteBean.cliente.cliCanton}"/>
+                        <p:outputLabel value="Dirección:"/>
+                        <p:inputTextarea value="#{clienteBean.cliente.cliDireccion}" style="width: 275px"/>
+                        <p:outputLabel value="Referencias:"/>
+                        <p:inputTextarea value="#{clienteBean.cliente.cliReferencia}" style="width: 275px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:commandButton value="Actualizar" update=":formClis, :growl" 
+                                         actionListener="#{clienteBean.updateClientData(event)}"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

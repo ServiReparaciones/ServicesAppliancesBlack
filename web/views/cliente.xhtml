@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <body>
+
+        <ui:composition template="./menu.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="growl" showDetail="true" life="3000" />
+                <h:form id="formCli">
+                    <h3 style="margin-top:0">Nuevo Cliente</h3>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres y Apellidos:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliNombres}" style="width: 275px"/>
+                        <p:outputLabel value="Cédula:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliCedula}" style="width: 275px"/>
+                        <p:outputLabel value="Teléfono"/>
+                        <p:inputText value="#{clienteBean.cliente.cliTelefono}" style="width: 275px"/>
+                        <p:outputLabel value="Movil:"/>
+                        <p:inputText value="#{clienteBean.cliente.cliMovil}" style="width: 275px"/>
+                        <p:outputLabel value="Provincia:"/>
+                        <p:selectOneMenu id="mProvincia" value="#{clienteBean.cliente.cliProvincia}" style="width: 275px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                            <f:selectItems value="#{clienteBean.itemsProvincias}" />
+                            <p:ajax update="mCanton" listener="#{clienteBean.loadItemsCantones(event)}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Cantón:"/>
+                        <p:selectOneMenu id="mCanton" value="#{clienteBean.cliente.cliCanton}" style="width: 275px">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                            <f:selectItems value="#{clienteBean.itemsCantones}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Dirección:"/>
+                        <p:inputTextarea value="#{clienteBean.cliente.cliDireccion}" style="width: 275px"/>
+                        <p:outputLabel value="Referencias:"/>
+                        <p:inputTextarea value="#{clienteBean.cliente.cliReferencia}" style="width: 275px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:commandButton value="Guardar" update=":formCli, :growl" actionListener="#{clienteBean.saveClientData(event)}"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

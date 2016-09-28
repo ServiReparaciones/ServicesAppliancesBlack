@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./menu.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="growl" showDetail="true" life="3000" />
+                <h:form id="formOrd">
+                    <h3 style="margin-top:0">Nueva Orden</h3>
+                    <p:accordionPanel>
+                        <p:tab title="Cliente">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Buscar por:"/>
+                                <p:selectOneMenu id="bucarCli" value="#{ordenBean.parametroBusqCli}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                                    <f:selectItem itemLabel="Cédula" itemValue="cliCedula" />
+                                    <f:selectItem itemLabel="Teléfono" itemValue="cliTelefono" />
+                                    <f:selectItem itemLabel="Movil" itemValue="cliMovil" />
+                                </p:selectOneMenu>
+                                <p:inputText value="#{ordenBean.valorBusqCli}" style="width:125px"/>
+                                <p:commandButton id="btnBusqCliente" value="Buscar" update="panelCli, btnEstCliente, :formOrd, :growl"
+                                                 actionListener="#{ordenBean.FindClientes(event)}"/>
+                            </h:panelGrid>
+                            <h:panelGrid id="panelCli" columns="4" cellpadding="5">
+                                <p:outputLabel value="Nombres y Apellidos:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliNombres}"/>
+                                <p:outputLabel value="Cédula:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliCedula}"/>
+                                <p:outputLabel value="Teléfono"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliTelefono}"/>
+                                <p:outputLabel value="Movil:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliMovil}"/>
+                                <p:outputLabel value="Provincia:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliProvincia}"/>
+                                <p:outputLabel value="Cantón:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliCanton}"/>
+                                <p:outputLabel value="Dirección:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliDireccion}"/>
+                                <p:outputLabel value="Referencias:"/>
+                                <p:outputLabel value="#{ordenBean.cliente.cliReferencia}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton id="btnEstCliente" value="Establecer Cliente" 
+                                                 disabled="#{ordenBean.habilitarCliente}" update="btnEstCliente,  :formOrd, :growl" 
+                                                 actionListener="#{ordenBean.EstablecerCliente(event)}"/>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Producto">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Buscar por:"/>
+                                <p:selectOneMenu id="bucarPro" value="#{ordenBean.parametroBusqPro}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                                    <f:selectItem itemLabel="Serie" itemValue="proSerie" />
+                                    <f:selectItem itemLabel="ID_SIS" itemValue="proNumSis" />
+                                    <f:selectItem itemLabel="Código 1" itemValue="proCod1" />
+                                    <f:selectItem itemLabel="Código 2" itemValue="proCod2" />
+                                    <f:selectItem itemLabel="Código 3" itemValue="proCod3" />
+                                </p:selectOneMenu>
+                                <p:inputText value="#{ordenBean.valorBusqPro}" style="width:125px"/>
+                                <p:commandButton id="btnBusqProducto" value="Buscar" update="panelProd, btnEstProducto, btnEstSaveProducto, :formOrd, :growl" 
+                                                 actionListener="#{ordenBean.FindProductos(event)}"/>
+                            </h:panelGrid>
+                            <h:panelGrid id="panelProd" columns="4" cellpadding="5">
+                                <p:outputLabel value="Producto:"/>
+                                <p:selectOneMenu id="mProducto" value="#{ordenBean.producto.proNombre}" style="width: 275px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                    <f:selectItems value="#{ordenBean.itemsProNombres}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Marca:"/>
+                                <p:selectOneMenu id="mMarca" value="#{ordenBean.producto.proMarca}" style="width: 275px">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                    <f:selectItems value="#{ordenBean.itemsMarcas}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Modelo:"/>
+                                <p:inputText value="#{ordenBean.producto.proModelo}" style="width: 275px"/>
+                                <p:outputLabel value="Serie:"/>
+                                <p:inputText value="#{ordenBean.producto.proSerie}" style="width: 275px"/>
+                                <p:outputLabel value="Código 1:"/>
+                                <p:inputText value="#{ordenBean.producto.proCod1}" style="width: 275px"/>
+                                <p:outputLabel value="Código 2:"/>
+                                <p:inputText value="#{ordenBean.producto.proCod2}" style="width: 275px"/>
+                                <p:outputLabel value="Código 3:"/>
+                                <p:inputText value="#{ordenBean.producto.proCod3}" style="width: 275px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton id="btnEstProducto" value="Establecer Producto" 
+                                                 disabled="#{ordenBean.hablilitaProducto}" update="btnEstProducto, :formOrd, :growl"
+                                                 actionListener="#{ordenBean.EstablecerProducto(event)}"/>
+                                <p:commandButton id="btnEstSaveProducto" value="Guardar y Establecer Producto" 
+                                                 disabled="#{ordenBean.hablilitaGuardarProducto}" update="btnEstSaveProducto, :formOrd, :growl"
+                                                 actionListener="#{ordenBean.saveProductos(event)}"/>
+                            </h:panelGrid>
+
+                            <h3 style="margin-top:0">Garantia del Producto</h3>
+
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton id="btnActGarantia" value="Activar Garantia" 
+                                                 disabled="#{ordenBean.hablilitaGarantia}" update="btnActGarantia, :formOrd, :growl" 
+                                                 actionListener="#{ordenBean.ActiveGarantias(event)}"/>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Orden">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Código Orden 1:"/>
+                                <p:inputText value="#{ordenBean.orden.ordNumOt1}"/>
+                                <p:outputLabel value="Código Orden 2:"/>
+                                <p:inputText value="#{ordenBean.orden.ordNumOt2}"/>
+                                <p:outputLabel value="Código Orden 3:"/>
+                                <p:inputText value="#{ordenBean.orden.ordNumOt3}"/>                               
+                                <p:outputLabel value="Fecha de Visita:"/>
+                                <p:calendar id="ordfechaVisita" value="#{ordenBean.orden.ordFechaVisita}" 
+                                            pattern="MM/dd/yyyy HH:mm:ss" showOn="button" />
+                                <p:outputLabel value="Falla:"/>
+                                <p:inputTextarea value="#{ordenBean.orden.ordFalla}" style="width: 275px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton id="btnGenOrden" value="Generar Orden" 
+                                                 disabled="#{ordenBean.hablilitaOrden}" update="btnGenOrden :formOrd, :growl" 
+                                                 actionListener="#{ordenBean.generatedOrden(event)}"/>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:accordionPanel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
