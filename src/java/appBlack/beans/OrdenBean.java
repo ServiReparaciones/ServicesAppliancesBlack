@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.jsoup.helper.StringUtil;
 
@@ -260,6 +261,22 @@ public class OrdenBean {
         }
     }
 
+    public void GeneratePDF() {
+        ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
+                .getExternalContext().getContext();
+        String serverPath = ctx.getRealPath("/");
+        String filepath = "WEB-INF/docs/";
+        // Boolean exito = DocumentsPdf.CreateFilePDF(this.SelectedDocument, serverPath + filepath);
+
+    }
+
+//    public void downloadDocsPDF(String fileName) {
+//        if (this.getSelectedDocument() != null) {
+//            InputStream CmpPDF = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("WEB-INF/docs/" + fileName);
+//            this.setPdfFile(new DefaultStreamedContent(CmpPDF, "application/pdf", fileName));
+//
+//        }
+//    }
     private Integer getUserAttribute() {
         Integer UserAttribute = 0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
