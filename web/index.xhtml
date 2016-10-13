@@ -12,7 +12,9 @@
         <p:growl id="growl" showDetail="true" life="3000"/>
         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-            <img src="#{loginBean.urlRequest}/resources/img/default.gif"></img>
+            <div align="center">
+                <img src="#{loginBean.urlRequest}/resources/img/default.gif" align="center"></img>
+            </div>
         </p:dialog>
         <h:form id="form">
             <header>Iniciar Sesión</header>

@@ -14,7 +14,7 @@
                 <p:growl id="growl" showDetail="true" life="3000" />
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                    <img src="#{loginBean.urlRequest}/resources/img/default.gif"></img>
+                    <img src="#{loginBean.urlRequest}/resources/img/default.gif" align="center"></img>
                 </p:dialog>
                 <h:form id="formOrdC">
                     <h1 align="right">Num. Orden: #{ordencBean.orden.ordNumSis}</h1>
