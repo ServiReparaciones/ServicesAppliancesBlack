@@ -12,6 +12,10 @@
 
             <ui:define name="content">
                 <p:growl id="growl" showDetail="true" life="3000" />
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <img src="#{loginBean.urlRequest}/resources/img/default.gif"></img>
+                </p:dialog>
                 <h:form id="formOrdC">
                     <h1 align="right">Num. Orden: #{ordencBean.orden.ordNumSis}</h1>
                     <br/>
@@ -158,7 +162,7 @@
                         <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
                         <p:outputLabel value="Valor Total:" />
                         <p:inputText value="#{ordencBean.orden.ordValorMobra}"/>
-                        
+
                         <p:outputLabel value="Reparación:" />
                         <p:inputTextarea value="#{ordencBean.orden.ordReparacion}" />
                     </h:panelGrid>

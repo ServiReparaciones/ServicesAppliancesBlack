@@ -5,8 +5,10 @@
  */
 package appBlack.beans;
 
+import DataServices.util.OrdenPdf;
 import dataservices.crud.dbServicesMethods;
 import dataservices.map.*;
+import java.io.InputStream;
 import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -17,6 +19,9 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.jsoup.helper.StringUtil;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -43,6 +48,10 @@ public class OrdenBean {
     private Boolean HablilitaGarantia;
     private Boolean HablilitaOrden;
 
+    private UploadedFile file;
+    private StreamedContent pdfFile;
+    private String downloadFileName;
+
     private ArrayList<SelectItem> itemsMarcas;
     private ArrayList<SelectItem> itemsProNombres;
     private ArrayList<SelectItem> itemsAlmacen;
@@ -55,9 +64,11 @@ public class OrdenBean {
         this.orden = new Orden();
         this.cliente = new Cliente();
         this.HabilitarCliente = true;
+        this.ParametroBusqCli = "";
         this.HablilitaProducto = true;
         this.HablilitaGuardarProducto = true;
         this.producto = new Producto();
+        this.ParametroBusqPro = "";
         this.garantia = new Garantia();
         this.HablilitaGarantia = true;
         this.HablilitaOrden = true;
@@ -250,6 +261,7 @@ public class OrdenBean {
                     registro.setFuncionarios(usuario);
                     Boolean regexito = dbServicesMethods.InsertRegistro(registro);
                     if (regexito) {
+                        GeneratePDF(ordNumSis);
                         this.init();
                         generateMessage(FacesMessage.SEVERITY_INFO, "Se genero correctamente", "La orden");
                     }
@@ -261,22 +273,27 @@ public class OrdenBean {
         }
     }
 
-    public void GeneratePDF() {
+    public void GeneratePDF(Integer ordNumSis) {
         ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
                 .getExternalContext().getContext();
         String serverPath = ctx.getRealPath("/");
         String filepath = "WEB-INF/docs/";
-        // Boolean exito = DocumentsPdf.CreateFilePDF(this.SelectedDocument, serverPath + filepath);
+        Boolean exito = OrdenPdf.generatedPdf(serverPath + filepath, ordNumSis);
+        if (exito) {
+            this.downloadFileName = "Orden_N_" + ordNumSis + ".pdf";
+            downloadDocsPDF(downloadFileName);
+        }
 
     }
 
-//    public void downloadDocsPDF(String fileName) {
-//        if (this.getSelectedDocument() != null) {
-//            InputStream CmpPDF = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("WEB-INF/docs/" + fileName);
-//            this.setPdfFile(new DefaultStreamedContent(CmpPDF, "application/pdf", fileName));
-//
-//        }
-//    }
+    public void downloadDocsPDF(String fileName) {
+        if (fileName != null) {
+            InputStream CmpPDF = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("WEB-INF/docs/" + fileName);
+            this.setPdfFile(new DefaultStreamedContent(CmpPDF, "application/pdf", fileName));
+
+        }
+    }
+
     private Integer getUserAttribute() {
         Integer UserAttribute = 0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -420,6 +437,48 @@ public class OrdenBean {
 
     public void setHablilitaGuardarProducto(Boolean HablilitaGuardarProducto) {
         this.HablilitaGuardarProducto = HablilitaGuardarProducto;
+    }
+
+    /**
+     * @return the file
+     */
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    /**
+     * @return the pdfFile
+     */
+    public StreamedContent getPdfFile() {
+        return pdfFile;
+    }
+
+    /**
+     * @return the downloadFileName
+     */
+    public String getDownloadFileName() {
+        return downloadFileName;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    /**
+     * @param pdfFile the pdfFile to set
+     */
+    public void setPdfFile(StreamedContent pdfFile) {
+        this.pdfFile = pdfFile;
+    }
+
+    /**
+     * @param downloadFileName the downloadFileName to set
+     */
+    public void setDownloadFileName(String downloadFileName) {
+        this.downloadFileName = downloadFileName;
     }
 
 }

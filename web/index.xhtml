@@ -10,6 +10,10 @@
     </h:head>
     <h:body>
         <p:growl id="growl" showDetail="true" life="3000"/>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <img src="#{loginBean.urlRequest}/resources/img/default.gif"></img>
+        </p:dialog>
         <h:form id="form">
             <header>Iniciar Sesión</header>
             <h:outputLabel value="Nombre de Usuario:"/>
@@ -24,8 +28,7 @@
             function handleLoginRequest(xhr, status, args) {
                 if (args.validationFailed || !args.loggedIn) {
                     jQuery('#form').effect("shake", {times: 5}, 100);
-                }
-                else {
+                } else {
                     location.href = args.ruta;
                 }
             }

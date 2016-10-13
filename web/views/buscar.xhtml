@@ -11,6 +11,10 @@
         <ui:composition template="./menu.xhtml">
             <ui:define name="content">
                 <p:growl id="growl" showDetail="true" life="3000" />
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <img src="#{loginBean.urlRequest}/resources/img/default.gif"></img>
+                </p:dialog>
                 <h:form id="formBusq">
                     <h3 style="margin-top:0">Busquedas</h3>
                     <p:accordionPanel>
@@ -262,7 +266,7 @@
                                         <h:outputText value="#{ordensBean.getEstado(event, ordO.ordEstado)}" />
                                     </p:column>
                                     <p:column style="width:32px;text-align: center">
-                                       <p:commandButton icon="ui-icon-search" update=":formBusq" 
+                                        <p:commandButton icon="ui-icon-search" update=":formBusq" 
                                                          actionListener="#{ordensBean.openOrden(event, ordO)}"
                                                          oncomplete="handleLoginRequest(xhr, status, args)"/>
                                     </p:column>
@@ -275,8 +279,7 @@
                         function handleLoginRequest(xhr, status, args) {
                             if (args.validationFailed || !args.loggedIn) {
                                 jQuery('#form').effect("shake", {times: 5}, 100);
-                            }
-                            else {
+                            } else {
                                 location.href = args.ruta;
                             }
                         }

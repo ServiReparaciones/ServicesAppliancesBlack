@@ -121,9 +121,12 @@
                                 <p:inputTextarea value="#{ordenBean.orden.ordFalla}" style="width: 275px"/>
                             </h:panelGrid>
                             <h:panelGrid columns="4" cellpadding="5">
-                                <p:commandButton id="btnGenOrden" value="Generar Orden" 
-                                                 disabled="#{ordenBean.hablilitaOrden}" update="btnGenOrden :formOrd, :growl" 
-                                                 actionListener="#{ordenBean.generatedOrden(event)}"/>
+                                <p:commandButton id="btnGenOrden" value="Generar Orden" ajax="false"
+                                                 disabled="#{ordenBean.hablilitaOrden}"
+                                                 actionListener="#{ordenBean.generatedOrden(event)}">
+                                    <p:fileDownload value="#{ordenBean.pdfFile}" />
+                                    <p:ajax update=":formOrd, :growl"/>
+                                </p:commandButton>
                             </h:panelGrid>
                         </p:tab>
                     </p:accordionPanel>
