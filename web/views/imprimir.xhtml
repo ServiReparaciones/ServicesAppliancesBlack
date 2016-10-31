@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Imprimir  Orden</title>
+         <script type="text/javascript" src="#{loginBean.urlRequest}resources/js/jquery-3.1.0.min.js"></script>
+        <f:metadata>
+            <f:viewParam name="data" value="#{printBean.codeCrypo}" />
+            <f:event type="preRenderView" listener="#{printBean.findOrdenPrinter(event)}"/>
+        </f:metadata>
+    </h:head>
+    <h:body>
+    Printer Orden 
+    <p:outputLabel value="#{printBean.printOrden.ordNumSis}"/>
+</html>
+

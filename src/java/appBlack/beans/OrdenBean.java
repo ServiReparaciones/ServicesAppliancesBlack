@@ -6,6 +6,7 @@
 package appBlack.beans;
 
 import DataServices.util.OrdenPdf;
+import appBlack.util.ServicesAppliancesBlack;
 import dataservices.crud.dbServicesMethods;
 import dataservices.map.*;
 import java.io.InputStream;
@@ -19,6 +20,7 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.jsoup.helper.StringUtil;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
@@ -56,11 +58,14 @@ public class OrdenBean {
     private ArrayList<SelectItem> itemsProNombres;
     private ArrayList<SelectItem> itemsAlmacen;
 
+    private String mRuta;
+
     public OrdenBean() {
         this.init();
     }
 
     private void init() {
+        this.mRuta = "";
         this.orden = new Orden();
         this.cliente = new Cliente();
         this.HabilitarCliente = true;
@@ -264,6 +269,43 @@ public class OrdenBean {
                         GeneratePDF(ordNumSis);
                         this.init();
                         generateMessage(FacesMessage.SEVERITY_INFO, "Se genero correctamente", "La orden");
+                    }
+                }
+            } else {
+                generateMessage(FacesMessage.SEVERITY_INFO, "Porfavor seleccione", "La fecha de visita de la orden");
+            }
+
+        }
+    }
+
+    public void imprimirOrden(ActionEvent event) {
+        if (this.orden.getCliente().getIdCliente() != null
+                && this.orden.getProducto().getIdPro() != null) {
+            if (this.orden.getOrdFechaVisita() != null) {
+                Integer ordNumSis = dbServicesMethods.NextNumOrdenes();
+                this.orden.setOrdNumSis(ordNumSis);
+                this.orden.setOrdFlag(1);
+                this.orden.setOrdEstado("1");
+                Boolean exito = dbServicesMethods.InsertOrden(this.orden);
+                if (exito) {
+                    this.orden = dbServicesMethods.FindOrden("ordNumSis", ordNumSis);
+                    Registro registro = new Registro();
+                    Estado estado = new Estado();
+                    estado.setIdEstado(1);
+                    registro.setEstado(estado);
+                    Orden regOrden = new Orden();
+                    regOrden.setIdOrden(this.orden.getIdOrden());
+                    registro.setOrden(regOrden);
+                    Funcionarios usuario = new Funcionarios();
+                    usuario.setIdFun(this.getUserAttribute());
+                    registro.setFuncionarios(usuario);
+                    Boolean regexito = dbServicesMethods.InsertRegistro(registro);
+                    if (regexito) {
+                        RequestContext context = RequestContext.getCurrentInstance();
+                        this.mRuta = ServicesAppliancesBlack.getURL_Login() + "views/imprimir.xhtml";
+                        context.addCallbackParam("loggedIn", true);
+                        context.addCallbackParam("ruta", mRuta);
+                        this.init();
                     }
                 }
             } else {
@@ -479,6 +521,20 @@ public class OrdenBean {
      */
     public void setDownloadFileName(String downloadFileName) {
         this.downloadFileName = downloadFileName;
+    }
+
+    /**
+     * @return the mRuta
+     */
+    public String getmRuta() {
+        return mRuta;
+    }
+
+    /**
+     * @param mRuta the mRuta to set
+     */
+    public void setmRuta(String mRuta) {
+        this.mRuta = mRuta;
     }
 
 }

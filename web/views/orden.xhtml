@@ -125,6 +125,12 @@
                                 <p:inputTextarea value="#{ordenBean.orden.ordFalla}" style="width: 275px"/>
                             </h:panelGrid>
                             <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton id="btnPrintOrden" value="Imprimir Orden"
+                                                 disabled="#{ordenBean.hablilitaOrden}"
+                                                 actionListener="#{ordenBean.imprimirOrden(event)}"
+                                                 oncomplete="handleLoginRequest(xhr, status, args)"
+                                                 update=":formOrd, :growl"/>
+                                <br/>
                                 <p:commandButton id="btnGenOrden" value="Generar Orden" ajax="false"
                                                  disabled="#{ordenBean.hablilitaOrden}"
                                                  actionListener="#{ordenBean.generatedOrden(event)}">
@@ -134,6 +140,15 @@
                             </h:panelGrid>
                         </p:tab>
                     </p:accordionPanel>
+                    <script type="text/javascript">
+                        function handleLoginRequest(xhr, status, args) {
+                            if (args.validationFailed || !args.loggedIn) {
+                                jQuery('#formOrd').effect("shake", {times: 5}, 100);
+                            } else {
+                                window.open(args.ruta);
+                            }
+                        }
+                    </script>
                 </h:form>
             </ui:define>
 
