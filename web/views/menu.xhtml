@@ -29,6 +29,11 @@
                     <p:menuitem value="Nueva" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/orden.xhtml"/>
                     <p:menuitem value="Buscar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/buscar.xhtml"/>
                 </p:submenu>
+                
+                <p:submenu label="Repuestos">
+                    <p:menuitem value="Registrar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/repuesto.xhtml" />
+                    <p:menuitem value="Actualizar" icon="ui-icon-circle-arrow-e" url="#{appBean.URL_Menu}/repuestos.xhtml" /> 
+                </p:submenu>
 
                 <f:facet name="options" >
                     <p:commandButton id="dynaButton" value="Usuario" type="button" icon="ui-icon-person" />
