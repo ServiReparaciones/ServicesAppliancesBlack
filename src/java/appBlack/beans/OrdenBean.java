@@ -302,7 +302,7 @@ public class OrdenBean {
                     Boolean regexito = dbServicesMethods.InsertRegistro(registro);
                     if (regexito) {
                         RequestContext context = RequestContext.getCurrentInstance();
-                        this.mRuta = ServicesAppliancesBlack.getURL_Login() + "views/imprimir.xhtml";
+                        this.mRuta = ServicesAppliancesBlack.getURL_Login() + "views/imprimir.xhtml?data="+orden.getOrdNumSis();
                         context.addCallbackParam("loggedIn", true);
                         context.addCallbackParam("ruta", mRuta);
                         this.init();

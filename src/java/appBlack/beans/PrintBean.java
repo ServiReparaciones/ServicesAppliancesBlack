@@ -25,6 +25,8 @@ public class PrintBean {
     private Orden printOrden;
 
     public PrintBean() {
+        this.CodeCrypo = "";
+        this.printOrden = new Orden();
     }
 
     public void findOrdenPrinter(ActionEvent event) {
